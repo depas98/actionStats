@@ -5,7 +5,7 @@ The ActionStatsService has two functions one is to add Actions items and the oth
 	 
    addAction(String) returning error
 
-This function accepts a JSON serialized string with the following format and will store each entry:
+This function accepts a JSON serialized string with the following format and will store the running average by action:
 			
 			{"action":"jump", "time":100}
 			{"action":"run", "time":75}
@@ -23,11 +23,7 @@ This function accepts a JSON serialized string with the following format and wil
 	1. Action can only be "jump" or "run" and these values are case sensitive
 	2. Time is an integer value
 	3. End User can make concurrent calls
-	4. It is assumed there are not a high number of action entries (i.e. < 10,000) so the 
-	   service will store all the entries and calculate the average when getStats is 
-	   called (Note: If this was not the case then the program would have not stored 
-	   the individual times and would have only stored a running average and an entry 
-	   count to better calculate the average)
+	4. Doesn't store each action item added, only stores the running average by action type
     
 ### Instructions For Running Program
 
