@@ -126,13 +126,16 @@ public class ActionStatsService {
         // join created threads and wait till they are done
         for (Thread thread : threads) {
             try {
-                thread.join(500);   // waiting .5 secs
+                thread.join(2000);   // waiting up to 2 secs for thread to finish
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        // get the Action Stats JSON string and print it out
+        // Get the Action Stats JSON string and print it out
+        // Note: a gotcha if a thread takes longer than 2 seconds then the stats output will
+        // not have all the records added because they haven't finished yet.
+        // This shouldn't happen unless the computer is really slow
         try {
             System.out.println();
             System.out.println("Stats: ");
