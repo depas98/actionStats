@@ -71,7 +71,8 @@ public class ActionStatsService {
      *  object for each type, and adding them to a list.  Then it will marshall the list to a JSON string and return it.
      *  The JSON string format will be the following:
      *
-     *  {"action":"jump", "avg":10.0}
+     *
+     *  [{"action":"jump", "avg":10.0}, {"action":"run", "avg":15.0}]
      *
      * @return A JSON string representing a list of ActionStat objects
      * @throws JsonProcessingException
