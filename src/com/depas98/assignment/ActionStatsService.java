@@ -83,6 +83,7 @@ public class ActionStatsService {
         try {
             // Get the list of actionStats from the map
             final List<ActionStat> actionStats = new ArrayList<>(actionStatMap.values());
+            System.out.println(actionStats);
 
             // TODO handle error better, would need to log error to file with the stack trace and rethrow the error
             // For now we are just throwing the JsonProcessingException and letting the caller handle it
