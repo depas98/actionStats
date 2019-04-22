@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.stream.Collectors;
-
 
 public class ActionStatsService {
 
@@ -44,7 +42,7 @@ public class ActionStatsService {
      * @throws IOException, IllegalArgumentException
      * Unchecked Exceptions JsonParseException, JsonMappingException, InvalidFormatException
      */
-    public void addAction(String actionTimeJson) throws IOException, IllegalArgumentException {
+    public void addAction(final String actionTimeJson) throws IOException, IllegalArgumentException {
 
         // TODO For now just doing a little sanity check, but in the future could do more validation
         // of the JSON string to give the user a better error message
@@ -59,24 +57,9 @@ public class ActionStatsService {
 
         writeLock.lock();
         try {
-            if (actionStatMap.containsKey(actionTimeEntry.getAction())){
-                // Action already exists need to recalculate the average and save it to the actionStatMap
-                ActionStat actionStat = actionStatMap.get(actionTimeEntry.getAction());
-                // get the existing average and item count for this action
-                double avg = actionStat.getAvg();
-                int count = actionStat.getCount();
-
-                // calculate and set the average, and the new item count
-                avg = ((avg * count) + actionTimeEntry.getTime()) / (count + 1);
-                actionStat.setAvg(avg);
-                count++;
-                actionStat.setCount(count);
-            }
-            else{
-                // Action hasn't been seen before
-                final Action action = actionTimeEntry.getAction();
-                actionStatMap.put(action, new ActionStat(action, actionTimeEntry.getTime()));
-            }
+            // add the new time to the ActionStat object in the map, create one if doesn't exist amd add to map
+            actionStatMap.computeIfAbsent(actionTimeEntry.getAction(), action -> new ActionStat(action))
+                    .addTime(actionTimeEntry.getTime());
         }
         finally {
             writeLock.unlock();
@@ -96,23 +79,19 @@ public class ActionStatsService {
      */
     public String getStats() throws JsonProcessingException{
 
-        List<ActionStat> actionStats = new ArrayList<>();
-
         readLock.lock();
         try {
-            // This will loop through the actionStatMap and add all the actionStats to a list
-            // create an ActionStat object and add it to a list
-            actionStats = actionStatMap.values()
-                    .stream()
-                    .collect(Collectors.toList());
+            // Get the list of actionStats from the map
+            final List<ActionStat> actionStats = new ArrayList<>(actionStatMap.values());
+
+            // TODO handle error better, would need to log error to file with the stack trace and rethrow the error
+            // For now we are just throwing the JsonProcessingException and letting the caller handle it
+            return new ObjectMapper().writeValueAsString(actionStats);  // marshal object to json string
         }
         finally {
             readLock.unlock();
         }
 
-        // TODO handle error better, would need to log error to file with the stack trace and rethrow the error
-        // For now we are just throwing the JsonProcessingException and letting the caller handle it
-        return new ObjectMapper().writeValueAsString(actionStats);  // marshal object to json string
     }
 
     public static void main(String[] args){
@@ -155,7 +134,7 @@ public class ActionStatsService {
 
         // get the Action Stats JSON string and print it out
         try {
-            System.out.println("");
+            System.out.println();
             System.out.println("Stats: ");
             System.out.println(actionService.getStats());
         } catch (JsonProcessingException e) {

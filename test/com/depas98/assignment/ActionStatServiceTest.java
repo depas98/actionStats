@@ -121,15 +121,15 @@ public class ActionStatServiceTest {
         catch (IOException e) {}
     }
 
-    @Test(expected = JsonMappingException.class)
-    public void addActionNegativeTimeTest() throws JsonMappingException {
+    @Test(expected = IllegalArgumentException.class)
+    public void addActionNegativeTimeTest() throws IllegalArgumentException {
         ActionStatsService actionStatsService = new ActionStatsService();
 
         // Test JSON string bad Action value case
         try {
             actionStatsService.addAction("{\"action\":\"jump\", \"time\":-10}");
         }
-        catch (JsonMappingException e) {
+        catch (IllegalArgumentException e) {
             throw e;
         }
         catch (IOException e) {}

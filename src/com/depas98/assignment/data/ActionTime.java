@@ -4,27 +4,12 @@ public class ActionTime {
     private Action action;
     private int time;
 
-    public ActionTime(){
-        super();
-    }
-
-    public void setAction(Action action) {
-        if (action == null){
-            throw new IllegalArgumentException("The parameter action can't be null");
-        }
-        this.action = action;
-    }
+//    public ActionTime(){
+//        super();
+//    }
 
     public Action getAction() {
         return action;
-    }
-
-    public void setTime(int time) {
-        // don't accept negative time
-        if (time < 0){
-            throw new IllegalArgumentException("The parameter time needs to be zero or greater");
-        }
-        this.time = time;
     }
 
     public int getTime() {
