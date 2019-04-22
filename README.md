@@ -24,11 +24,11 @@ This function accepts a JSON serialized string with the following format and wil
 	  1. Action can only be "jump" or "run" and these values are case sensitive
 	  2. Time is an integer value
 	  3. End User can make concurrent calls
-    4. It is assumed the action entries are not very large (i.e. < 10,000) so the 
-       service will store all the entries and calculate the average when getStats is 
-       called (Note: If this was not the case then the program would have not stored 
-       the individual times and would have only stored a running average and an entry 
-       count to better calculate the average)
+    	  4. It is assumed the action entries are not very large (i.e. < 10,000) so the 
+       	  service will store all the entries and calculate the average when getStats is 
+       	  called (Note: If this was not the case then the program would have not stored 
+       	  the individual times and would have only stored a running average and an entry 
+       	  count to better calculate the average)
     
 ### Instructions For Running Program
 
