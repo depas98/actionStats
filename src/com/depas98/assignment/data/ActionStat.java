@@ -24,7 +24,13 @@ public class ActionStat {
         return avg;
     }
 
-    public void addTime(int time){
+    /**
+     * This will accept a time and calculate the new average
+     * and increment the count of action items
+     *
+     * @param time the time for the new action
+     */
+    public void addTime(final int time){
         // don't accept negative time
         if (time < 0){
             throw new IllegalArgumentException("The value of time needs to be zero or greater, time = " + time);

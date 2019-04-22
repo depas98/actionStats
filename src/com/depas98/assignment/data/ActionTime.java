@@ -4,10 +4,6 @@ public class ActionTime {
     private Action action;
     private int time;
 
-//    public ActionTime(){
-//        super();
-//    }
-
     public Action getAction() {
         return action;
     }

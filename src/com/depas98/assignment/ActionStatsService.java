@@ -58,7 +58,7 @@ public class ActionStatsService {
         writeLock.lock();
         try {
             // add the new time to the ActionStat object in the map, create one if doesn't exist amd add to map
-            actionStatMap.computeIfAbsent(actionTimeEntry.getAction(), action -> new ActionStat(action))
+            actionStatMap.computeIfAbsent(actionTimeEntry.getAction(), ActionStat::new)
                     .addTime(actionTimeEntry.getTime());
         }
         finally {
