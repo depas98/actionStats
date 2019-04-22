@@ -15,7 +15,7 @@ This function accepts a JSON serialized string with the following format and wil
 	
   getStats() return string
 	
-This function returns a JSON string for the average time for each action, with the following format:
+This function returns a JSON string with the average time for each action, with the following format:
 			
 			[{"action":"jump", "avg":10.0}, {"action":"run", "avg":15.0}]
 
