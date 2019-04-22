@@ -86,12 +86,15 @@ You can run all the unit test for this service, output will be like the followin
 In the "actionStats" directory
 
 Give the script files exec permission
-chmod 755 *.sh
+
+	chmod 755 *.sh
 
 Running Main Program execute the script below:
-./run.sh
+
+	./run.sh
 	
 or you can execute the following individually
+	
 	to compile 
 	javac -d ./bin -cp ./lib/jackson-core-2.9.7.jar:./lib/jackson-databind-2.9.7.jar:./lib/jackson-annotations-2.9.7.jar ./src/com/depas98/assignment/data/Action.java ./src/com/depas98/assignment/data/ActionStat.java ./src/com/depas98/assignment/data/ActionTime.java ./src/com/depas98/assignment/ActionStatsService.java
 	
@@ -99,9 +102,11 @@ or you can execute the following individually
 	java -cp ./bin:./lib/jackson-core-2.9.7.jar:./lib/jackson-databind-2.9.7.jar:./lib/jackson-annotations-2.9.7.jar com.depas98.assignment.ActionStatsService
 
 Running Unit Tests execute the script below
+	
 	./runTests.sh
 
 or you can execute the following individually
+	
 	to compile 
 	javac -d ./bin -cp ./lib/jackson-core-2.9.7.jar:./lib/jackson-databind-2.9.7.jar:./lib/jackson-annotations-2.9.7.jar:./bin:./lib/junit-4.12.jar:./lib/hamcrest-core-1.3.jar ./src/com/depas98/assignment/data/Action.java ./src/com/depas98/assignment/data/ActionStat.java ./src/com/depas98/assignment/data/ActionTime.java ./src/com/depas98/assignment/ActionStatsService.java ./test/com/depas98/assignment/ActionStatServiceTest.java 
 	
@@ -112,9 +117,11 @@ or you can execute the following individually
 In the "actionStats" directory
 
 Running Main Program execute the script below:
-  run.bat
+  	
+	run.bat
 
 or you can execute the following individually
+	
 	to compile
 	javac -d ./bin -cp ./lib/jackson-core-2.9.7.jar;./lib/jackson-databind-2.9.7.jar;./lib/jackson-annotations-2.9.7.jar ./src/com/depas98/assignment/data/Action.java ./src/com/depas98/assignment/data/ActionStat.java  ./src/com/depas98/assignment/data/ActionTime.java ./src/com/depas98/assignment/ActionStatsService.java
 	
@@ -122,9 +129,11 @@ or you can execute the following individually
 	java -cp ./bin;./lib/jackson-core-2.9.7.jar;./lib/jackson-databind-2.9.7.jar;./lib/jackson-annotations-2.9.7.jar com.depas98.assignment.ActionStatsService
 
 Running Unit Tests execute the script below
-  runTests.bat
+  
+  	runTests.bat
 
 or you can execute the following individually
+	
 	to compile 
 	javac -d ./bin -cp ./lib/jackson-core-2.9.7.jar;./lib/jackson-databind-2.9.7.jar;./lib/jackson-annotations-2.9.7.jar;./bin;./lib/junit-4.12.jar;./lib/hamcrest-core-1.3.jar ./src/com/depas98/assignment/data/Action.java ./src/com/depas98/assignment/data/ActionStat.java ./src/com/depas98/assignment/data/ActionTime.java ./src/com/depas98/assignment/ActionStatsService.java ./test/com/depas98/assignment/ActionStatServiceTest.java 
 	
