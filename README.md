@@ -15,7 +15,7 @@ This function accepts a JSON serialized string with the following format and wil
 	
   getStats() return string
 	
-	Returns the a JSON string for the average tie for each action, with the following format:
+This function returns a JSON string for the average time for each action, with the following format:
 			
 			[{"action":"jump", "avg":10.0}, {"action":"run", "avg":15.0}]
 
@@ -23,7 +23,7 @@ This function accepts a JSON serialized string with the following format and wil
 	1. Action can only be "jump" or "run" and these values are case sensitive
 	2. Time is an integer value
 	3. End User can make concurrent calls
-	4. Doesn't store each action item added, only stores the running average by action type
+	4. Service doesn't store each action item added, only stores the running average by action type
     
 ### Instructions For Running Program
 
