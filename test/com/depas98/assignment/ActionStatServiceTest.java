@@ -193,7 +193,7 @@ public class ActionStatServiceTest {
     @Test
     public void actionStatsServiceConcurrencyTest()  {
         // To test concurrency each one of these JASON entries will be run on a separate thread
-        List<String> actionStatJsonList = List.of(
+        List<String> actionTimeJsonList = List.of(
                 "{\"action\":\"run\", \"time\":250}",
                 "{\"action\":\"jump\", \"time\":50}",
                 "{\"action\":\"run\", \"time\":200}",
@@ -208,10 +208,10 @@ public class ActionStatServiceTest {
         List<Thread> threads = new ArrayList<>();
 
         // create a new thread for each item in the JSON list and call addAction with the JSON string
-        for (String actionStatJson : actionStatJsonList) {
+        for (String actionTimeJson : actionTimeJsonList) {
             Thread thread = new Thread(() -> {
                 try {
-                    actionService.addAction(actionStatJson);
+                    actionService.addAction(actionTimeJson);
                 } catch (IOException e) {}
             });
             threads.add(thread);
@@ -228,7 +228,6 @@ public class ActionStatServiceTest {
         // get the Action Stats JSON string and print it out
         try {
             String stats = actionService.getStats();
-
             // can't rely on order of the action types so need to parse and figure out the order
             String[] statsArr = stats.split(",");
             assertEquals(4, statsArr.length);

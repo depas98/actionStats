@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 
 
 public class ActionStatsService {
@@ -22,12 +23,13 @@ public class ActionStatsService {
     private final Lock readLock = rwLock.readLock();
     private final Lock writeLock = rwLock.writeLock();
 
-    // this holds the data for a list of ActionTime objects grouped by Action
-    private final Map<Action, List<ActionTime>> actionTimeMap = new HashMap<>();
+    // this holds the data for a list of ActionStat objects grouped by Action
+    private final Map<Action, ActionStat> actionStatMap = new HashMap<>();
 
     /**
      *  Given a JSON string that represents an ActionTime object this will
-     *  unmarshal the string to the object and add it to the actionTimeMap
+     *  unmarshal the string to the object calculate the running average for the Action
+     *  and save to the actionStatMap
      *
      *  The JSON string format should be (and is case sensitive) the following:
      *
@@ -57,8 +59,24 @@ public class ActionStatsService {
 
         writeLock.lock();
         try {
-            actionTimeMap.computeIfAbsent(actionTimeEntry.getAction(), k -> new ArrayList<>())
-                    .add(actionTimeEntry);
+            if (actionStatMap.containsKey(actionTimeEntry.getAction())){
+                // Action already exists need to recalculate the average and save it to the actionStatMap
+                ActionStat actionStat = actionStatMap.get(actionTimeEntry.getAction());
+                // get the existing average and item count for this action
+                double avg = actionStat.getAvg();
+                int count = actionStat.getCount();
+
+                // calculate and set the average, and the new item count
+                avg = ((avg * count) + actionTimeEntry.getTime()) / (count + 1);
+                actionStat.setAvg(avg);
+                count++;
+                actionStat.setCount(count);
+            }
+            else{
+                // Action hasn't been seen before
+                final Action action = actionTimeEntry.getAction();
+                actionStatMap.put(action, new ActionStat(action, actionTimeEntry.getTime()));
+            }
         }
         finally {
             writeLock.unlock();
@@ -67,10 +85,9 @@ public class ActionStatsService {
     }
 
     /**
-     *  This will process the actionStats map calculating the average time for each Action type, creating an ActionStat
-     *  object for each type, and adding them to a list.  Then it will marshall the list to a JSON string and return it.
+     *  This will process the actionStatMap creating an ActionStat list.
+     *  Then it will marshall the list to a JSON string and return it.
      *  The JSON string format will be the following:
-     *
      *
      *  [{"action":"jump", "avg":10.0}, {"action":"run", "avg":15.0}]
      *
@@ -79,22 +96,15 @@ public class ActionStatsService {
      */
     public String getStats() throws JsonProcessingException{
 
-        final List<ActionStat> actionStats = new ArrayList<>();
+        List<ActionStat> actionStats = new ArrayList<>();
 
         readLock.lock();
         try {
-            // This will loop through the actionTimeMap calculating the average time for each Action type
+            // This will loop through the actionStatMap and add all the actionStats to a list
             // create an ActionStat object and add it to a list
-            actionTimeMap.forEach((action, value) -> {
-                double average = value
-                        .stream()
-                        .map(ActionTime::getTime)
-                        .mapToInt(v -> v)
-                        .average()
-                        .orElse(0);
-
-                actionStats.add(new ActionStat(action, average));
-            });
+            actionStats = actionStatMap.values()
+                    .stream()
+                    .collect(Collectors.toList());
         }
         finally {
             readLock.unlock();
@@ -108,7 +118,7 @@ public class ActionStatsService {
     public static void main(String[] args){
 
         // To test concurrency each one of these JASON entries will be run on a separate thread
-        List<String> actionStatJsonList = List.of(
+        List<String> actionTimeJsonList = List.of(
                 "{\"action\":\"run\", \"time\":200}",
                 "{\"action\":\"jump\", \"time\":100}",
                 "{\"action\":\"run\", \"time\":150}",
@@ -121,10 +131,11 @@ public class ActionStatsService {
         List<Thread> threads = new ArrayList<>();
 
         // create a new thread for each item in the JSON list and call addAction with the JSON string
-        for (String actionStatJson : actionStatJsonList) {
+        for (String actionTimeJson : actionTimeJsonList) {
             Thread thread = new Thread(() -> {
                 try {
-                    actionService.addAction(actionStatJson);
+                    System.out.println("Adding action: " + actionTimeJson);
+                    actionService.addAction(actionTimeJson);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -144,6 +155,8 @@ public class ActionStatsService {
 
         // get the Action Stats JSON string and print it out
         try {
+            System.out.println("");
+            System.out.println("Stats: ");
             System.out.println(actionService.getStats());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
