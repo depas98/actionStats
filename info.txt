@@ -1,0 +1,6 @@
+some new stuff here
+
+commit #1 during squash activity
+commit #2 during squash activity
+commit #3 during squash activity
+commit #4 during squash activity
