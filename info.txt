@@ -1,0 +1,3 @@
+some new stuff here
+
+commit #1 during squash activity
