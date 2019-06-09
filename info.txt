@@ -1,3 +1,4 @@
 some new stuff here
 
 commit #1 during squash activity
+commit #2 during squash activity
