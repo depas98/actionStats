@@ -3,4 +3,3 @@ javac -d ./bin -cp ./lib/jackson-core-2.9.7.jar;./lib/jackson-databind-2.9.7.jar
 
 java -cp ./bin;./lib/jackson-core-2.9.7.jar;./lib/jackson-databind-2.9.7.jar;./lib/jackson-annotations-2.9.7.jar com.depas98.assignment.ActionStatsService
 
-echo off
