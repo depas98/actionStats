@@ -9,4 +9,7 @@ commit #6 during squash activity
 commit #7 during squash activity
 commit #8 during squash activity
 commit #8 during squash activity
+
 commit #16 this ios from dev 2 bug fix
+
+commit #16 dev 1 working on bug fix
